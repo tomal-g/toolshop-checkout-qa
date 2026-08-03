@@ -1,0 +1,17 @@
+{
+  "name": "api-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "newman run collections/toolshop-checkout.postman_collection.json -e environments/toolshop-stable.postman_environment.json -r htmlextra,cli --reporter-htmlextra-export reports/report.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "newman": "^6.2.2",
+    "newman-reporter-htmlextra": "^1.23.1"
+  }
+}
