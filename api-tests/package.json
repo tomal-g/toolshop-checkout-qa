@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "newman run collections/toolshop-checkout.postman_collection.json -e environments/toolshop-stable.postman_environment.json -r htmlextra,cli --reporter-htmlextra-export reports/report.html"
   },
   "keywords": [],
   "author": "",
