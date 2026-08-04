@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "newman run api-tests/collections/toolshop-checkout.postman_collection.json -e api-tests/environments/toolshop-stable.postman_environment.json -r htmlextra,cli --reporter-htmlextra-export reports/report.html"
+    "testStableAPI": "newman run api-tests/collections/toolshop-checkout.postman_collection.json -e api-tests/environments/toolshop-stable.postman_environment.json -r htmlextra,cli --reporter-htmlextra-export reports/report.html",
+    "testBugAPI": "newman run api-tests/collections/toolshop-checkout.postman_collection.json -e api-tests/environments/toolshop-bug-seeded.postman_environment.json -r htmlextra,cli --reporter-htmlextra-export reports/bug-seeded-report.html"
   },
   "keywords": [],
   "author": "",
