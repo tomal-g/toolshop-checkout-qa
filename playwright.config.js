@@ -2,6 +2,7 @@ const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './ui-tests/tests',
+  globalSetup: require.resolve('./ui-tests/fixtures/auth.setup.js'),
   fullyParallel: false,
   retries: 1,
   workers: 1,
@@ -11,6 +12,7 @@ module.exports = defineConfig({
   ],
   use: {
     baseURL: process.env.BASE_URL || 'https://practicesoftwaretesting.com',
+    storageState: 'ui-tests/auth/storageState.json',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
