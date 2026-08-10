@@ -1,28 +1,28 @@
 name: QA Pipeline
 
 on:
-  push:
-    branches:
-      - develop
-      - main
   pull_request:
-    branches:
-      - develop
-      - main
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
 
 jobs:
-  # ========== STAGE 1: Build & Lint ==========
   build:
-    name: Build & Lint
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x] # Explicitly use Node 20 (or 22.x)
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
+      - uses: actions/checkout@v4
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
         run: npm install
@@ -121,8 +121,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup k6
-        run: sudo apt-get update && sudo apt-get install -y k6
+      - name: Install k6
+        run: |
+          sudo gpg -k
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3232A
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3232A
+          sudo apt-get update
+          sudo apt-get install -y k6
 
       - name: Run k6 smoke tests
         run: |
