@@ -6,3 +6,10 @@ test-results/
 playwright-report/
 *.html
 *.zip
+
+# Playwright
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+/ui-tests/auth/storageState.json
