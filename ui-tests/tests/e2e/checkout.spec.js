@@ -8,9 +8,6 @@ const { ensureLoggedIn } = require("../../fixtures/auth-helper");
 
 test.describe("E2E-01: Registered User Checkout", () => {
   test("completes checkout successfully", async ({ page }) => {
-    // The auth.setup.js global setup registers a fresh account and saves
-    // storageState, so the test starts pre-authenticated. However the JWT
-    // only lasts 5 minutes, so re-auth if the token has expired.
     await ensureLoggedIn(page);
 
     const catalog = new CatalogPage(page);

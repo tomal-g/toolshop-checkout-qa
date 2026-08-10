@@ -10,9 +10,7 @@ class ProductPage {
   }
 
   async addToCart() {
-    // Wait for the button to be enabled (not out of stock)
     await this.addToCartButton.waitFor({ state: 'visible' });
-    // Read the current cart quantity before adding (if present)
     const cartQty = this.page.getByTestId('cart-quantity');
     let beforeCount = 0;
     if ((await cartQty.count()) > 0) {
@@ -21,8 +19,6 @@ class ProductPage {
     }
 
     await this.addToCartButton.click();
-
-    // Wait for the cart quantity badge to appear and increment, confirming the item was added
     await cartQty.waitFor({ state: 'visible' });
     await this.page.waitForFunction(
       (prev) => {

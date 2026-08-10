@@ -6,16 +6,13 @@ test.describe("E2E-07: Product Filtering & Sorting", () => {
     const catalog = new CatalogPage(page);
     await catalog.navigate();
 
-    // Sort by price low-high
     await catalog.sortBy("Price (Low - High)");
 
-    // Wait for product prices to load before reading them
     await page.waitForFunction(() => {
       const prices = document.querySelectorAll('[data-test="product-price"]');
       return prices.length > 0;
     }, { timeout: 15000 });
 
-    // Get prices and verify they're in ascending order
     const prices = await catalog.getProductPrices();
     const numericPrices = prices.map(p => parseFloat(p.replace("$", "")));
     expect(numericPrices.length).toBeGreaterThan(0);
@@ -29,16 +26,13 @@ test.describe("E2E-07: Product Filtering & Sorting", () => {
     const catalog = new CatalogPage(page);
     await catalog.navigate();
 
-    // Sort by price high-low
     await catalog.sortBy("Price (High - Low)");
 
-    // Wait for product prices to load before reading them
     await page.waitForFunction(() => {
       const prices = document.querySelectorAll('[data-test="product-price"]');
       return prices.length > 0;
     }, { timeout: 15000 });
 
-    // Get prices and verify they're in descending order
     const prices = await catalog.getProductPrices();
     const numericPrices = prices.map(p => parseFloat(p.replace("$", "")));
     expect(numericPrices.length).toBeGreaterThan(0);
@@ -52,15 +46,10 @@ test.describe("E2E-07: Product Filtering & Sorting", () => {
     const catalog = new CatalogPage(page);
     await catalog.navigate();
 
-    // Get initial product count
     const initialCount = await catalog.getProductCardCount();
 
-    // Filter by "Pliers" category
     await catalog.filterByCategory("Pliers");
 
-    // Get product names and verify all are in the Pliers category.
-    // Note: the Pliers subcategory on this site includes "Bolt Cutters",
-    // which does not contain "pliers" in its name.
     const names = await catalog.getProductNames();
     expect(names.length).toBeGreaterThan(0);
     expect(names.length).toBeLessThan(initialCount);

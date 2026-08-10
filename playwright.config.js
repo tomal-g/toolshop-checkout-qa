@@ -2,7 +2,6 @@ const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './ui-tests/tests',
-  globalSetup: require.resolve('./ui-tests/fixtures/auth.setup.js'),
   timeout: 60000,
   fullyParallel: false,
   retries: 1,

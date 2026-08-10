@@ -5,7 +5,7 @@
 | Field | Detail |
 |-------|--------|
 | **ID** | BLK-001 |
-| **Date** | 2026-08-03 |
+| **Date** | 03-08-2026 |
 | **Environment** | Local Docker |
 | **Severity** | High |
 | **Status** | Open |
@@ -31,7 +31,7 @@ The local Toolshop Docker stack consistently returns HTTP 500 for `GET /products
 | Field | Detail |
 |-------|--------|
 | **ID** | BLK-002 |
-| **Date** | 2026-08-09 |
+| **Date** | 10-08-2026 |
 | **Environment** | Chromium E2E Tests |
 | **Severity** | Medium |
 | **Status** | Open |
@@ -69,3 +69,46 @@ await this.page.waitForTimeout(2000);
 3. Conditional test skips for known slow operations (not ideal)
 
 **Recommendation:** Accept hard waits as technical debt. Document in test cases. Escalate to backend team for test infrastructure improvements.
+
+## BLK-003 — Cross-Browser E2E Execution Deferred Due to Browser-Specific Test Stability
+
+| Field | Detail |
+|-------|--------|
+| **ID** | BLK-003 |
+| **Date** | 10-08-2026 |
+| **Environment** | Firefox / WebKit E2E Tests |
+| **Severity** | Medium |
+| **Status** | Deferred |
+
+**Description:**
+The Toolshop E2E test suite is currently stable and fully passing on Chromium, but the same test suite does not achieve equivalent stability on Firefox and WebKit. Due to the asynchronous behavior and timing sensitivity already identified in BLK-002, cross-browser execution was deferred following mentor guidance.
+
+**Current test status:**
+- ✅ Chromium: 14/14 tests passing
+- ⚠️ Firefox: Not considered stable enough for final execution
+- ⚠️ WebKit: Not considered stable enough for final execution
+- ⏸️ Cross-browser validation deferred pending resolution of underlying timing issues
+
+**Relationship to BLK-002:**
+The cross-browser limitation is primarily associated with the existing timing-sensitive behavior documented in BLK-002. Filter, sorting, and order-history operations depend on backend responses and UI updates that do not occur at predictable times. The current hard-wait workaround provides stable results on Chromium but does not provide sufficient confidence that the same timing assumptions will remain reliable across Firefox and WebKit.
+
+**Tests potentially affected:**
+- E2E-01 through E2E-08, where browser-specific timing or rendering behavior may affect execution
+- Particularly E2E-07: Product Filtering & Sorting
+- Particularly E2E-08: Order History
+
+**Attempted approach:**
+- ❌ Cross-browser execution does not currently provide the same stability as Chromium
+- ❌ Replacing hard waits with polling logic was unsuccessful and introduced additional race conditions/timeouts (see BLK-002)
+- ✅ Chromium execution retained as the stable baseline
+- ⏸️ Firefox and WebKit execution deferred rather than treating unstable results as application defects
+
+**Current workaround:**
+Use Chromium as the supported execution browser for the current E2E test baseline.
+
+The stable baseline is:
+
+```text
+Chromium — 14/14 passing
+Firefox   — Deferred
+WebKit    — Deferred

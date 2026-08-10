@@ -13,7 +13,6 @@ class CartPage {
 
   async navigate() {
     await this.page.goto('/checkout', { waitUntil: 'domcontentloaded' });
-    // Wait for the proceed button (cart step) to be ready before continuing
     await this.proceedButton.waitFor({ state: 'visible' });
   }
 
@@ -53,10 +52,8 @@ class CartPage {
 
   async updateQuantity(index, quantity) {
     const input = this.productQuantities.nth(index);
-    // Read the current total before updating
     const beforeTotal = await this.getCartTotal();
 
-    // Use the native input value setter to properly trigger Angular's ngModel
     await input.evaluate((el, value) => {
       const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
         window.HTMLInputElement.prototype,
@@ -68,7 +65,6 @@ class CartPage {
     }, String(quantity));
     await input.blur();
 
-    // Wait for the total to actually change (Angular recalculation)
     await this.page.waitForFunction(
       (prevTotal) => {
         const el = document.querySelector('[data-test="cart-total"]');
@@ -82,10 +78,8 @@ class CartPage {
   }
 
   async removeItem(index) {
-    // Get the current item count before removing
     const beforeCount = await this.productTitles.count();
 
-    // Try data-test attribute first, fall back to btn-danger class
     const removeBtn = this.page.locator('[data-test="remove"]').nth(index);
     if ((await removeBtn.count()) > 0) {
       await removeBtn.click();
@@ -93,7 +87,6 @@ class CartPage {
       await this.removeButtons.nth(index).click();
     }
 
-    // Wait for the item count to decrease
     await this.page.waitForFunction(
       (prevCount) => {
         return document.querySelectorAll('[data-test="product-title"]').length < prevCount;
