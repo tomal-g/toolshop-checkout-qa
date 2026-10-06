@@ -1,0 +1,20 @@
+{
+  "name": "api-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test:stable": "newman run api-tests/collections/toolshop-checkout.postman_collection.json -e api-tests/environments/toolshop-stable.postman_environment.json -r htmlextra,cli --reporter-htmlextra-export reports/report.html",
+    "test:bugs": "newman run api-tests/collections/toolshop-checkout.postman_collection.json -e api-tests/environments/toolshop-bug-seeded.postman_environment.json -r htmlextra,cli --reporter-htmlextra-export reports/bug-seeded-report.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.1.2",
+    "newman": "^6.2.2",
+    "newman-reporter-htmlextra": "^1.23.1"
+  }
+}
